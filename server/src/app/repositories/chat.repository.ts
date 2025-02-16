@@ -1,4 +1,9 @@
-import { ChatHistory, ChatMessage, OnlineUsers, User } from '@nx-chat-assignment/shared-models';
+import {
+  ChatHistory,
+  ChatMessage,
+  OnlineUsers,
+  User,
+} from '@nx-chat-assignment/shared-models';
 import { v4 as uuidv4 } from 'uuid';
 
 const chatHistory: ChatHistory = [];
@@ -10,7 +15,7 @@ export const ChatRepository = {
       .filter(
         (msg) =>
           (msg.sender.id === userId && msg.receiver.id === receiverId) ||
-          (msg.sender.id === receiverId && msg.receiver.id === userId),
+          (msg.sender.id === receiverId && msg.receiver.id === userId)
       )
       .slice(-50),
 

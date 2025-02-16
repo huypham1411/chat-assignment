@@ -16,4 +16,6 @@ app.use('/api', routes);
 ChatSocket(io);
 
 const PORT = process.env.PORT || 4000;
-httpServer.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+httpServer.listen(PORT, () =>
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
+);

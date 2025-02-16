@@ -4,7 +4,9 @@ import { ChatRepository } from '../repositories/chat.repository';
 
 export const AuthService = {
   login: (username: string): User | null => {
-    const existingUser = ChatRepository.getUsersOnline().find((u) => u.username === username);
+    const existingUser = ChatRepository.getUsersOnline().find(
+      (u) => u.username === username
+    );
 
     if (existingUser && existingUser.online) {
       return null;
