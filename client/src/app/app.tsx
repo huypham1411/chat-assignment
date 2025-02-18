@@ -1,11 +1,17 @@
 // Uncomment this line to use CSS modules
 // import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+
+import { Route, Routes } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 export function App() {
   return (
     <div>
-      <NxWelcome title="@nx-chat-assignment/client" />
+      <Navbar />
+      <Routes>
+        {/* <Route path="/" element={<Home />} />
+      <Route path="/sign-in" element={<SignInPage />} /> */}
+      </Routes>
     </div>
   );
 }
