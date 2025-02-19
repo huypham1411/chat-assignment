@@ -9,7 +9,11 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:4200',
+  })
+);
 app.use(express.json());
 app.use('/api', routes);
 

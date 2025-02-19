@@ -6,12 +6,13 @@
     "@tailwindcss/postcss": "^4.0.6",
     "@tailwindcss/vite": "^4.0.6",
     "autoprefixer": "^10.4.20",
+    "lucide-react": "^0.475.0",
     "postcss": "^8.5.2",
     "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
     "axios": "^1.7.9",
-    "daisyui": "^4.12.23",
+    "daisyui": "5.0.0-beta.8",
     "react-hot-toast": "^2.5.2",
     "react-router-dom": "^7.1.5",
     "socket.io-client": "^4.8.1",

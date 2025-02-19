@@ -1,16 +1,35 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
-
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import LoginPage from '../pages/LoginPage';
+import { useAuthStore } from '../store/useAuthStore';
+import { Loader } from 'lucide-react';
+import HomePage from '../pages/HomePage';
+import { Toaster } from 'react-hot-toast';
 
 export function App() {
+  const { authUser, isLoggingIn, onlineUsers } = useAuthStore();
+  console.log('🚀 ~ app.tsx:12 ~ App ~ onlineUsers:', onlineUsers);
+
+  if (isLoggingIn)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
+
   return (
-    <div>
+    <div data-theme={'coffee'}>
+      <Toaster />
       <Navbar />
       <Routes>
-        {/* <Route path="/" element={<Home />} />
-      <Route path="/sign-in" element={<SignInPage />} /> */}
+        <Route
+          path="/"
+          element={authUser ? <HomePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+        />
       </Routes>
     </div>
   );

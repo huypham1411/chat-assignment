@@ -28,6 +28,10 @@ export const ChatSocket = (io: Server) => {
         event: 'usersOnline',
         data: UsersService.getOnlineUsers(),
       });
+      console.log(
+        '🚀 ~ chat.socket.ts:31 ~ socket.on ~ UsersService.getOnlineUsers():',
+        UsersService.getOnlineUsers()
+      );
     });
 
     socket.on('message:send', ({ receiver, message }) => {
@@ -81,6 +85,7 @@ export const ChatSocket = (io: Server) => {
 
     socket.on('disconnect', () => {
       const user: User = socket.data.user;
+      console.log('disconnected', socket.id);
 
       if (user) {
         AuthService.logout(user.id);
