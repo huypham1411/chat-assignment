@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const protocol = window.location.hostname === 'localhost' ? 'http' : 'https';
+
 export const axiosClient = axios.create({
-  baseURL: `http://${window.location.hostname}:4000/api`,
+  baseURL: `${protocol}://${window.location.hostname}:4000/api`,
 });

@@ -64,7 +64,9 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
     const { authUser } = get();
     if (!authUser) return;
 
-    const socket = io('http://localhost:4000', {
+    const protocol =
+      window.location.hostname === 'localhost' ? 'http' : 'https';
+    const socket = io(`${protocol}://${window.location.hostname}:4000`, {
       query: {
         userId: authUser.id,
       },
