@@ -7,8 +7,7 @@ import HomePage from '../pages/HomePage';
 import { Toaster } from 'react-hot-toast';
 
 export function App() {
-  const { authUser, isLoggingIn, onlineUsers } = useAuthStore();
-  console.log('🚀 ~ app.tsx:12 ~ App ~ onlineUsers:', onlineUsers);
+  const { authUser, isLoggingIn } = useAuthStore();
 
   if (isLoggingIn)
     return (

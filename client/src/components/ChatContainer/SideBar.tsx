@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
 import SidebarSkeleton from './Skeleton/SidebarSkeleton';
 import { useChatStore } from '../../store/useChatStore';
+import { useAuthStore } from '../../store/useAuthStore';
 
 const Sidebar = () => {
   const {
@@ -13,8 +14,7 @@ const Sidebar = () => {
     isUsersLoading,
   } = useChatStore();
 
-  //   const { onlineUsers } = useAuthStore();
-  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const { onlineUsers, authUser } = useAuthStore();
 
   useEffect(() => {
     if (!isUsersLoading) {
@@ -31,24 +31,10 @@ const Sidebar = () => {
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
         </div>
-        <div className="mt-3 hidden lg:flex items-center gap-2">
-          <label className="cursor-pointer flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showOnlineOnly}
-              onChange={(e) => setShowOnlineOnly(e.target.checked)}
-              className="checkbox checkbox-sm"
-            />
-            <span className="text-sm">Show online only</span>
-          </label>
-          <span className="text-xs text-zinc-500">
-            ({users.length - 1} online)
-          </span>
-        </div>
       </div>
 
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+        {onlineUsers.map((user) => (
           <button
             key={user.id}
             onClick={() => setSelectedUser(user)}
@@ -63,24 +49,25 @@ const Sidebar = () => {
             `}
           >
             <div className="relative mx-auto lg:mx-0">
-              {/* <img
-                src={user.profilePic || '/avatar.png'}
-                alt={user.name}
+              <img
+                src={'/image/avatar.png'}
+                alt={user.username}
                 className="size-12 object-cover rounded-full"
-              /> */}
-              {users.includes(user) && (
-                <span
-                  className="absolute bottom-0 right-0 size-3 bg-green-500 
+              />
+              <span
+                className="absolute bottom-0 right-0 size-3 bg-green-500 
                   rounded-full ring-2 ring-zinc-900"
-                />
-              )}
+              />
             </div>
 
             {/* User info - only visible on larger screens */}
             <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.username}</div>
+              <div className="font-medium truncate">
+                {user.username}
+                {user.id === authUser?.id && <span>{`(You)`}</span>}
+              </div>
               <div className="text-sm text-zinc-400">
-                {users.includes(user) ? 'Online' : 'Offline'}
+                {onlineUsers.includes(user) ? 'Online' : 'Offline'}
               </div>
             </div>
           </button>

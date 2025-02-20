@@ -32,8 +32,8 @@ type ChatStore = {
   setSelectedUser: (user: User | null) => void;
   getChatHistory: (userId: string, receiverId: string) => Promise<void>;
   sendMessage: (message: string) => Promise<void>;
-  setSocket: (socket: Socket) => void;
-  handleReceiveMessage: (message: Message) => void;
+  subscribeToMessages: () => void;
+  unsubscribeFromMessages: () => void;
 };
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -42,7 +42,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
-  socket: null,
+  socket: useAuthStore.getState().socket || null,
 
   getOnlineUsers: async () => {
     set({ isUsersLoading: true });
@@ -74,6 +74,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  // First, add a new method to handle message subscription
+  subscribeToMessages: () => {
+    const { socket, selectedUser } = get();
+    const currentUser = useAuthStore.getState().authUser;
+
+    if (!socket || !selectedUser || !currentUser) return;
+
+    socket.on('message:receive', (response) => {
+      const newMessage = response.data;
+      set((state) => ({
+        messages: state.messages.some((msg) => msg.id === newMessage.id)
+          ? state.messages
+          : [...state.messages, newMessage],
+      }));
+    });
+  },
+
   sendMessage: async (message) => {
     const { socket, selectedUser } = get();
     const currentUser = useAuthStore.getState().authUser;
@@ -85,14 +102,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       message,
     });
   },
-
-  setSocket: (socket) => {
-    set({ socket });
-  },
-
-  handleReceiveMessage: (message) => {
-    set((state) => ({
-      messages: [...state.messages, message],
-    }));
+  unsubscribeFromMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off('message:receive');
   },
 }));
+
+useAuthStore.subscribe((state) => {
+  useChatStore.setState({ socket: state.socket });
+});

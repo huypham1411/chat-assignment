@@ -75,7 +75,6 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
     socket.emit('user:login', authUser.username);
 
     socket.on('usersOnline', (response: { event: string; data: User[] }) => {
-      console.log('🚀 ~ useAuthStore.ts:75 ~ socket.on ~ userIds:', response);
       set({ onlineUsers: response.data });
     });
   },

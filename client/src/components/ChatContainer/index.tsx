@@ -7,15 +7,25 @@ import MessageInput from './MesageInput';
 import { formatMessageTime } from '../../utils/formatMessageTime';
 
 const ChatContainer = () => {
-  const { messages, isMessagesLoading, getChatHistory, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    isMessagesLoading,
+    getChatHistory,
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef<HTMLElement>(null);
   useEffect(() => {
     if (selectedUser && authUser) {
       getChatHistory(authUser.id, selectedUser.id);
+      subscribeToMessages();
     }
-  }, [selectedUser, getChatHistory, authUser]);
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [selectedUser, getChatHistory, authUser, subscribeToMessages]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -50,14 +60,7 @@ const ChatContainer = () => {
           >
             <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
-                {/* <img
-                  src={
-                    message.sender.id === authUser.id
-                      ? authUser.profilePic || '/avatar.png'
-                      : selectedUser.profilePic || '/avatar.png'
-                  }
-                  alt="profile pic"
-                /> */}
+                <img src="/image/avatar.png" alt="avt" />
               </div>
             </div>
             <div className="chat-header mb-1">

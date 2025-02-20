@@ -13,7 +13,7 @@ export const ChatSocket = (io: Server) => {
     socket.on('user:login', (username: string) => {
       const user = AuthService.login(username);
 
-      if (!user) {
+      if (user === null) {
         socket.emit('error', {
           event: 'user:login',
           message: 'Username is already taken',
@@ -28,14 +28,11 @@ export const ChatSocket = (io: Server) => {
         event: 'usersOnline',
         data: UsersService.getOnlineUsers(),
       });
-      console.log(
-        '🚀 ~ chat.socket.ts:31 ~ socket.on ~ UsersService.getOnlineUsers():',
-        UsersService.getOnlineUsers()
-      );
     });
 
     socket.on('message:send', ({ receiver, message }) => {
       const sender: User = socket.data.user;
+
       if (!sender) {
         socket.emit('error', {
           event: 'message:send',
