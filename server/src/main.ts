@@ -8,12 +8,19 @@ import { ChatSocket } from './app/sockets/chat.socket';
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
+console.log('Server starting...');
 
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 app.use(express.json());
 app.use('/api', routes);
 
 ChatSocket(io);
 
 const PORT = process.env.PORT || 4000;
-httpServer.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+httpServer.listen(PORT, () =>
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
+);

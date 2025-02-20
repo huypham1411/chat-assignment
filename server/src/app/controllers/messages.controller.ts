@@ -1,18 +1,15 @@
 import { Request, Response } from 'express';
 import { MessagesService } from '../services/messages.service';
 
-export const handleSendMessage = (req: Request, res: Response) => {
-  const { user, message } = req.body;
-  if (!user || !message) return res.status(400).json({ error: 'Invalid request' });
+export const handleGetChatHistory = (req: Request, res: Response) => {
+  const { userId, receiverId } = req.params;
 
-  return res.json(MessagesService.sendMessage(user, message));
+  if (!userId || !receiverId) {
+    return res
+      .status(400)
+      .json({ error: 'Both userId and receiverId are required' });
+  }
+
+  const chatHistory = MessagesService.getChatHistory(userId, receiverId);
+  return res.json(chatHistory);
 };
-
-export const handleGetChatHistory = (_: Request, res: Response) =>
-  res.json(MessagesService.getChatHistory());
-
-export const handleGetUnreadMessages = (req: Request, res: Response) =>
-  res.json(MessagesService.getUnreadMessages(req.params.userId));
-
-export const handleDeleteMessage = (req: Request, res: Response) =>
-  res.json(MessagesService.deleteMessage(req.params.messageId));

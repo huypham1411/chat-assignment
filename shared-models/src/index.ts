@@ -8,21 +8,10 @@ export type OnlineUsers = User[];
 
 export type ChatMessage = {
   id: string;
-  user: User;
+  sender: User;
+  receiver: User;
   message: string;
   timestamp: number;
 };
 
 export type ChatHistory = ChatMessage[];
-
-export type TypingStatus = {
-  userId: string;
-  username: string;
-  isTyping: boolean;
-};
-
-export type UnreadMessage = {
-  chatId: string;
-  lastMessage: ChatMessage;
-  unreadCount: number;
-};

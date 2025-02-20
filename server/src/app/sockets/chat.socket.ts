@@ -1,8 +1,10 @@
 import { User } from '@nx-chat-assignment/shared-models';
 import { Server, Socket } from 'socket.io';
-import { ChatRepository } from '../repositories/chat.repository';
 import { AuthService } from '../services/auth.service';
 import { MessagesService } from '../services/messages.service';
+import { UsersService } from '../services/users.service';
+
+const userSockets: Record<string, string> = {};
 
 export const ChatSocket = (io: Server) => {
   io.on('connection', (socket: Socket) => {
@@ -11,53 +13,84 @@ export const ChatSocket = (io: Server) => {
     socket.on('user:login', (username: string) => {
       const user = AuthService.login(username);
 
-      if (!user) {
-        socket.emit('error', { message: 'Username is already taken' });
+      if (user === null) {
+        socket.emit('error', {
+          event: 'user:login',
+          message: 'Username is already taken',
+        });
         return;
       }
 
       socket.data.user = user;
-      io.emit('usersOnline', AuthService.getUsersOnline());
-      socket.emit('chatHistory', MessagesService.getChatHistory());
+      userSockets[user.id] = socket.id;
 
-      const unreadMessages = ChatRepository.getUnreadMessages(user.id);
-      socket.emit('unreadMessages', unreadMessages);
+      io.emit('usersOnline', {
+        event: 'usersOnline',
+        data: UsersService.getOnlineUsers(),
+      });
     });
 
-    socket.on('message:send', (message: string) => {
-      const user: User = socket.data.user;
+    socket.on('message:send', ({ receiver, message }) => {
+      const sender: User = socket.data.user;
 
-      if (!user) {
-        socket.emit('error', { message: 'User not logged in' });
+      if (!sender) {
+        socket.emit('error', {
+          event: 'message:send',
+          message: 'User not logged in',
+        });
         return;
       }
 
-      const chatMessage = MessagesService.sendMessage(user, message);
-      io.emit('message:receive', chatMessage);
-
-      io.emit('notification:newMessage', { from: user.username, message });
-
-      ChatRepository.getUsersOnline()
-        .filter((u) => u.id !== user.id && !u.online)
-        .forEach((u) => {
-          ChatRepository.addUnreadMessage(u.id, chatMessage);
+      if (!receiver || !receiver.id) {
+        socket.emit('error', {
+          event: 'message:send',
+          message: 'Receiver is required',
         });
+        return;
+      }
+
+      const receiverUser = UsersService.getOnlineUsers().find(
+        (user: User) => user.id === receiver.id
+      );
+      if (!receiverUser) {
+        socket.emit('error', {
+          event: 'message:send',
+          message: 'Receiver not found',
+        });
+        return;
+      }
+
+      const chatMessage = MessagesService.sendMessage(
+        sender,
+        receiverUser,
+        message
+      );
+
+      socket.emit('message:receive', {
+        event: 'message:receive',
+        data: chatMessage,
+      });
+
+      const receiverSocketId = userSockets[receiver.id];
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('message:receive', {
+          event: 'message:receive',
+          data: chatMessage,
+        });
+      }
     });
 
     socket.on('disconnect', () => {
       const user: User = socket.data.user;
+      console.log('disconnected', socket.id);
 
       if (user) {
         AuthService.logout(user.id);
-        io.emit('usersOnline', AuthService.getUsersOnline());
-      }
-    });
-
-    socket.on('message:read', () => {
-      const user: User = socket.data.user;
-      if (user) {
-        ChatRepository.clearUnreadMessages(user.id);
-        socket.emit('unreadMessages', []);
+        delete userSockets[user.id];
+        io.emit('usersOnline', {
+          event: 'usersOnline',
+          data: UsersService.getOnlineUsers(),
+        });
       }
     });
   });

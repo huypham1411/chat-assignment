@@ -1,85 +1,107 @@
 # Chat Assignment
-⚠️ **Fork this repository** instead of downloading it. This allows you to track your progress and submit your work easily.
-1. **Fork the Repository**
-Click the **"Fork"** button at the top right of this GitHub repo.
-2. **Clone Your Forked Repo**
-	```bash
-	git clone https://github.com/YOUR_GITHUB_USERNAME/nx-chat-assignment.git
-	cd nx-chat-assignment
-	```
-3. **Install Dependencies**
-	```bash
-	pnpm install
 
-	# run client and server apps
-	pnpm start
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/kamilabs-ai/nx-chat-assignment.git
+   cd nx-chat-assignment
+   ```
+2. **Install Dependencies**
 
-	# run tests
-	pnpm test
-	```
+   ```bash
+   pnpm install
+
+   # run client and server apps
+   pnpm start
+
+   # run tests
+   pnpm test
+   ```
 
 ## **Description:**
 
-The goal of this assignment is to build a **simple real-time chat application**.
+Build a **simple 1-on-1 chat application** that allows users to **send and receive messages in real-time**.
 
--   **Simulated login** (just enter a username, no authentication required).
--   **Send & receive messages in real-time** (using WebSocket or API polling).
--   **Display the list of online users**.
--   **Show chat history** (store in local state or mock API).
--   **Show new message notifications** (if the user is in another tab).
+### **Core Features**
+
+- **Simulated login** (just enter a username, no authentication required).
+- **See a list of online users and start a chat.**
+- **Send & receive messages in real-time using Socket.io.**
+- **Show previous messages between two users when the page is refreshed.**
+
+### **Optional (Bonus)**
+
+- **Basic UI styling** with Tailwind, MUI, or any other approach.
+- **Auto-scroll to the latest message.**
+- **Smooth animations when sending & receiving messages.**
 
 ## **Requirements:**
 
--   The app must have a **simple, user-friendly UI**.
--   WebSocket should be implemented correctly to **update messages in real-time**.
--   Show **previous messages (chat history)** when a user refreshes or reopens the app.
--   When a user sends a message, **other users should receive it instantly**.
--   If a user **disconnects (closes the app), the online users list should update**.
+- The app must have a **simple, clean, and user-friendly UI**.
+- The chat interface should be **responsive** and display messages clearly.
+- Messages should appear instantly using **Socket.io for real-time updates**.
+- When a user sends a message, **the recipient should receive it instantly**.
+- Show **previous messages between two users** when the page is refreshed.
+- Ensure **good UI/UX design**:
+  - Messages should be **easily readable** with distinct styling for sender & receiver.
+  - The chat input should be **intuitive to use**, with proper focus handling.
 
-## **Optional Features (Bonus Points)**:
+## **Optional Features (Bonus Points):**
 
--  **Performance Optimization:**
-	-   Use **React.memo, useCallback** to prevent unnecessary re-renders.
-	-   Efficient state management with **Zustand or Redux Toolkit**.
-- **Handle Network Issues & Connection Loss:**
-	- If the WebSocket connection is lost, show **"Reconnecting..."** and attempt to reconnect.
-- Use **any styling approach** (or none). Options: Tailwind, MUI, Styled Components, etc.
--  Write **a couple of tests**—2 or 3 should be enough. No need for full test coverage.
+- Use **any styling approach** (Tailwind, MUI, Styled Components, etc.). Basic styling is recommended for readability.
+- Write **a couple of tests**—2 or 3 should be enough. No need for full test coverage.
+- **State Management (Optional, if needed):**
+  - Use **React Context, Zustand, or Redux Toolkit** if managing chat state becomes complex (e.g., handling active conversations, message caching).
 
-## Server / API
-The server application is available at http://localhost:4000/api when you run `pnpm start`.
+## **Server / API**
 
-Please see the [API docs here](./server/README.md).
+- The server application is available at `http://localhost:4000/api` when you run `pnpm start`.
+- **Real-time communication is powered by [Socket.io](https://socket.io/), and the frontend must connect to this server using Socket.io (not WebSocket API).**
+- Please see the [API docs here](./server/README.md).
 
-## Submitting your solution
-1.  **Source Code:**  
-- Provide the link to your public GitHub repository containing all source code files for the Mini Chat App. 
-- This should include:
-	- All React and TypeScript files (for the frontend).
-	- All Node.js and WebSocket files (for the backend).
-	- Any assets, configurations, and dependencies required to run the application.
-2.  **Live Link (Optional):**  Optionally, you can deploy the website on a hosting platform and provide the live link. This will allow the reviewers to interact with the application directly.
+## **Submitting Your Solution**
 
-## Evaluation Criteria
+1. **Source Code:**
+
+   - Provide a public GitHub repository with all frontend source code.
+   - Your submission should include:
+     - All **React and TypeScript files** (for the frontend).
+     - Any **assets, configurations, and dependencies** required to run the application.
+   - The backend is already provided, so candidates only need to implement the frontend.
+
+2. **Live Link (Optional):**
+   - You can deploy the website on a hosting platform (e.g., Vercel, Netlify) and provide the live link.
+   - This allows reviewers to test your application directly.
+
+### **Using AI Tools (Encouraged!)**
+
+We encourage you to leverage AI tools (e.g., GitHub Copilot, ChatGPT, Tabnine) to improve efficiency, code quality, and problem-solving. However, ensure that you **understand and can explain** all the code you submit.
+
+## **Evaluation Criteria**
 
 Your submission will be assessed based on the following key factors:
 
-### Core Functionality (50%)
-- Does the chat application work correctly?
-- Can users log in, send messages, and receive messages in real-time?
-- Does the list of online users update correctly?
+### **1. Core Functionality (70%)**
 
-### Code Quality & Best Practices (25%)
-- Is the code clean, well-structured, and maintainable?
-- Is the state management (if used) implemented correctly?
-- Are reusable components and hooks properly utilized?
+- **Functionality (50%)**:
+  - Does the chat application work correctly?
+  - Can users log in, send messages, and receive messages in real-time?
+  - Does the chat history persist when the page is refreshed?
+- **UI/UX (20%)**:
+  - Is the UI **clean, modern, and visually appealing**?
+  - Are messages **clearly distinguishable** (sender & receiver messages have different styles)?
+  - Is the app **responsive** and adapts well to different screen sizes?
+  - Is the chat input **intuitive and easy to use**?
 
-### Performance & Scalability (15%)
-- Does the application handle large message loads smoothly?
-- Does it avoid unnecessary re-renders?
-- Does it implement basic WebSocket reconnection handling?
+### **2. Code Quality & Best Practices (20%)**
 
-### Optional Enhancements (10%)
-- Are performance optimizations like `React.memo` or `useCallback` used?
-- Has the developer added tests to validate key features?
-- Is the UI clean and responsive (Tailwind, MUI, Styled Components, etc.)?
+- Is the code **clean, well-structured, and maintainable**?
+- Are **React best practices** followed (component reusability, separation of concerns, proper state handling)?
+- Are asynchronous calls (API requests, real-time events via Socket.io) handled correctly?
+
+### **3. Optional Enhancements (10%)**
+
+- Has the developer added basic styling to ensure messages are easy to read and distinguish?
+- Has the developer added auto-scroll or smooth animations to improve user experience?
+- Has the developer added basic tests (if any) to validate core features?
+
+**Note: I have updated the auth service since it worked a bit oddly cause I never received new online users, and some other issues when I integrated with the client.**

@@ -4,13 +4,13 @@
   "files": [],
   "references": [
     {
+      "path": "./shared-models"
+    },
+    {
       "path": "./server"
     },
     {
       "path": "./client"
-    },
-    {
-      "path": "./shared-models"
     }
   ]
 }
