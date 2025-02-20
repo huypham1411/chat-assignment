@@ -73,7 +73,13 @@ const ChatContainer = () => {
                 {formatMessageTime(message.timestamp)}
               </time>
             </div>
-            <div className="chat-bubble flex flex-col">
+            <div
+              className={`chat-bubble flex flex-col ${
+                message.sender.id === authUser?.id
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-800'
+              }`}
+            >
               <p>{message.message}</p>
             </div>
           </div>

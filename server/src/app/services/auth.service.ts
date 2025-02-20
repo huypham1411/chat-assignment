@@ -3,23 +3,25 @@ import { v4 as uuidv4 } from 'uuid';
 import { ChatRepository } from '../repositories/chat.repository';
 
 export const AuthService = {
-  login: (username: string): User => {
-    const existingUser = ChatRepository.getUsersOnline().find(
+  login: (username: string, existingUser?: User): User => {
+    const onlineUser = ChatRepository.getUsersOnline().find(
       (u) => u.username === username
     );
 
-    // For new users
-    if (!existingUser) {
-      const newUser: User = { id: uuidv4(), username, online: true };
-      ChatRepository.addUser(newUser);
-      return newUser;
+    if (onlineUser) {
+      return onlineUser;
     }
 
-    // For existing users
-    existingUser.online = true;
-    return existingUser;
-  },
+    if (existingUser) {
+      existingUser.online = true;
+      ChatRepository.addUser(existingUser);
+      return existingUser;
+    }
 
+    const newUser: User = { id: uuidv4(), username, online: true };
+    ChatRepository.addUser(newUser);
+    return newUser;
+  },
   logout: (userId: string) => {
     const user = ChatRepository.getUsersOnline().find((u) => u.id === userId);
 

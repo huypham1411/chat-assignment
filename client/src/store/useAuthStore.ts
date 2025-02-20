@@ -28,7 +28,13 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
   login: async (data: { username: string }) => {
     set({ isLoggingIn: true });
     try {
-      const res = await axiosClient.post('/auth/login', data);
+      const savedUser = JSON.parse(
+        sessionStorage.getItem('authUser') || 'null'
+      );
+      const res = await axiosClient.post('/auth/login', {
+        username: data.username,
+        user: savedUser,
+      });
       if (res.data) {
         set({ authUser: res.data });
         sessionStorage.setItem('authUser', JSON.stringify(res.data));

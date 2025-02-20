@@ -104,4 +104,4 @@ Your submission will be assessed based on the following key factors:
 - Has the developer added auto-scroll or smooth animations to improve user experience?
 - Has the developer added basic tests (if any) to validate core features?
 
-**I have updated the auth service since it worked a bit oddly cause I never received new online users.**
+**Note: I have updated the auth service since it worked a bit oddly cause I never received new online users, and some other issues when I integrated with the client.**
