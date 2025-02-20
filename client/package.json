@@ -2,6 +2,9 @@
   "name": "@nx-chat-assignment/client",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "build": "vite build"
+  },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.6",
     "@tailwindcss/vite": "^4.0.6",

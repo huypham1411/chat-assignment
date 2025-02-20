@@ -8,6 +8,7 @@ import { ChatSocket } from './app/sockets/chat.socket';
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
+console.log('Server starting...');
 
 app.use(
   cors({
