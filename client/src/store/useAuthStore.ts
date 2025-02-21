@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
 
     const requestUrl =
       window.location.hostname === 'localhost'
-        ? `http://localhost:4000/api`
+        ? `http://localhost:4000`
         : productionUrl;
     const socket = io(requestUrl, {
       query: {

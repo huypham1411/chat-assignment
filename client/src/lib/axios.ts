@@ -4,5 +4,5 @@ export const axiosClient = axios.create({
   baseURL:
     window.location.hostname === 'localhost'
       ? `http://localhost:4000/api`
-      : productionUrl,
+      : `${productionUrl}/api`,
 });
