@@ -17,6 +17,15 @@ const ChatContainer = () => {
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef<HTMLElement>(null);
+
+  const filteredMessages = messages.filter(
+    (message) =>
+      (message.sender.id === authUser?.id &&
+        message.receiver.id === selectedUser?.id) ||
+      (message.sender.id === selectedUser?.id &&
+        message.receiver.id === authUser?.id)
+  );
+
   useEffect(() => {
     if (selectedUser && authUser) {
       getChatHistory(authUser.id, selectedUser.id);
@@ -46,7 +55,7 @@ const ChatContainer = () => {
     <div className="flex-1 flex flex-col overflow-auto">
       <ChatHeader />{' '}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message, index) => (
+        {filteredMessages.map((message, index) => (
           <div
             key={message.id}
             className={`chat ${

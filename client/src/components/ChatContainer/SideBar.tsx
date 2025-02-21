@@ -1,9 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Users } from 'lucide-react';
 import SidebarSkeleton from './Skeleton/SidebarSkeleton';
-import { useChatStore } from '../../store/useChatStore';
+import { useChatStore, User } from '../../store/useChatStore';
 import { useAuthStore } from '../../store/useAuthStore';
+
+type SocketResponse<T = unknown> = {
+  event: string;
+  data: T;
+};
+type MessageResponse = {
+  id: string;
+  sender: User;
+  receiver: User;
+  message: string;
+  timestamp: number;
+};
 
 const Sidebar = () => {
   const {
@@ -14,13 +26,37 @@ const Sidebar = () => {
     isUsersLoading,
   } = useChatStore();
 
-  const { onlineUsers, authUser } = useAuthStore();
-
+  const { onlineUsers, authUser, socket } = useAuthStore();
+  const [incommingMessage, setIncommingMessage] = useState<string[]>([]);
   useEffect(() => {
     if (!isUsersLoading) {
       getOnlineUsers();
     }
   }, [getOnlineUsers]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on(
+        'message:receive',
+        (response: SocketResponse<MessageResponse>) => {
+          console.log('🚀 ~ SideBar.tsx:42 ~ useEffect ~ response:', response);
+          if (response.data) {
+            const { sender, receiver } = response.data;
+            if (
+              receiver.id === authUser?.id &&
+              sender.id !== selectedUser?.id &&
+              !incommingMessage.includes(sender.id)
+            ) {
+              setIncommingMessage((prev) => [...prev, sender.id]);
+            }
+          }
+        }
+      );
+    }
+    return () => {
+      if (socket) socket.off('message:receive');
+    };
+  }, [socket, authUser?.id, selectedUser?.id, incommingMessage]);
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -43,10 +79,15 @@ const Sidebar = () => {
         {sortedUsers.map((user) => (
           <button
             key={user.id}
-            onClick={() => setSelectedUser(user)}
+            onClick={() => {
+              setSelectedUser(user);
+              setIncommingMessage((prev) =>
+                prev.filter((id) => id !== user.id)
+              );
+            }}
             className={`
               w-full p-3 flex items-center gap-3
-              hover:bg-base-300 transition-colors
+              hover:bg-base-300 transition-colors relative
               ${
                 selectedUser?.id === user.id
                   ? 'bg-base-300 ring-1 ring-base-300'
@@ -81,6 +122,12 @@ const Sidebar = () => {
                 {onlineUsers.includes(user) ? 'Online' : 'Offline'}
               </div>
             </div>
+
+            {incommingMessage.includes(user.id) && (
+              <div className="absolute right-1 bg-red-600 w-[20px] rounded-full top-0 md:top-5">
+                !
+              </div>
+            )}
           </button>
         ))}
 
