@@ -15,7 +15,7 @@
     "format": "nx format --all",
     "build:client": "pnpm --filter client run build",
     "build:server": "nx build server --configuration=production",
-    "start:server:prod": "node dist/apps/server/main.js"
+    "start:server:prod": "node server/dist/main.js"
   },
   "private": true,
   "devDependencies": {

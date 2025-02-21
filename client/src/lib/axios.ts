@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const protocol = window.location.hostname === 'localhost' ? 'http' : 'https';
-
+const productionUrl = 'https://chat-assignment-i4ar.onrender.com/api';
 export const axiosClient = axios.create({
-  baseURL: `${protocol}://${window.location.hostname}:4000/api`,
+  baseURL:
+    window.location.hostname === 'localhost'
+      ? `http://localhost:4000/api`
+      : productionUrl,
 });
