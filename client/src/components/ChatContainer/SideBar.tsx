@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Users } from 'lucide-react';
 import SidebarSkeleton from './Skeleton/SidebarSkeleton';
@@ -24,6 +24,12 @@ const Sidebar = () => {
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
+  const sortedUsers = [...onlineUsers].sort((a, b) => {
+    if (a.id === authUser?.id) return -1;
+    if (b.id === authUser?.id) return 1;
+    return 0;
+  });
+
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
       <div className="border-b border-base-300 w-full p-5">
@@ -34,7 +40,7 @@ const Sidebar = () => {
       </div>
 
       <div className="overflow-y-auto w-full py-3">
-        {onlineUsers.map((user) => (
+        {sortedUsers.map((user) => (
           <button
             key={user.id}
             onClick={() => setSelectedUser(user)}
@@ -58,6 +64,11 @@ const Sidebar = () => {
                 className="absolute bottom-0 right-0 size-3 bg-green-500 
                   rounded-full ring-2 ring-zinc-900"
               />
+              {user.id === authUser?.id && (
+                <span className="absolute -top-2 -right-2 text-xs bg-base-300 px-1 rounded lg:hidden">
+                  You
+                </span>
+              )}
             </div>
 
             {/* User info - only visible on larger screens */}
