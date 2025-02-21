@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { productionUrl } from '../constants/host';
+import { productionUrl } from '../constants';
 export const axiosClient = axios.create({
   baseURL:
     window.location.hostname === 'localhost'

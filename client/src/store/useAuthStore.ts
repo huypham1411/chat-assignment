@@ -3,7 +3,7 @@ import { axiosClient } from '../lib/axios.js';
 import toast from 'react-hot-toast';
 import { io, Socket } from 'socket.io-client';
 import { getErrorMessage } from '../utils/getErrorMessage.js';
-import { productionUrl } from '../constants/host';
+import { productionUrl } from '../constants';
 
 type User<T = Record<string, unknown>> = {
   id: string;
