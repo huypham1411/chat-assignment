@@ -13,7 +13,8 @@
     "lint:server": "nx run server:lint",
     "lint:client": "nx run client:lint",
     "format": "nx format --all",
-    "build:client": "pnpm --filter client run build"
+    "build:client": "pnpm --filter client run build",
+    "build:server": "nx build server --configuration=production"
   },
   "private": true,
   "devDependencies": {
