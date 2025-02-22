@@ -39,7 +39,6 @@ const Sidebar = () => {
       socket.on(
         'message:receive',
         (response: SocketResponse<MessageResponse>) => {
-          console.log('🚀 ~ SideBar.tsx:42 ~ useEffect ~ response:', response);
           if (response.data) {
             const { sender, receiver } = response.data;
             if (
